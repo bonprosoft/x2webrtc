@@ -1,7 +1,7 @@
 import asyncio
 from typing import Optional
 
-from aiortc import RTCDataChannel, RTCIceCandidate, RTCPeerConnection, RTCSessionDescription
+from aiortc import RTCDataChannel, RTCPeerConnection, RTCSessionDescription
 
 from momo.track import ScreenCaptureTrack
 
@@ -21,20 +21,11 @@ class WebRTCClient:
         self._track.active = True
         try:
             # TODO(igarashi): Handle connection closed
-            # self._pc.sctp.transport.state == "closed"
-
-            from aiortc.contrib.signaling import BYE
-
             while True:
-                obj = await self.signaling.receive()
-                if isinstance(obj, RTCIceCandidate):
-                    self._pc.addIceCandidate(obj)
-                elif obj is BYE:
-                    print("Exiting")
+                if self._pc.sctp.transport.state == "closed":
                     break
-                else:
-                    assert False, type(obj)
 
+                await asyncio.sleep(0.1)
         finally:
             self._connection_task = None
             self._track.active = False
