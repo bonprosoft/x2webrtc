@@ -5,10 +5,7 @@ import Xlib
 import Xlib.display
 import Xlib.X
 from PIL import Image
-
-
-def print_with_tabs(n_tab, s):
-    print(" " * n_tab + s)
+from Xlib.ext.xtest import fake_input
 
 
 @dataclasses.dataclass
@@ -70,6 +67,30 @@ class Window:
         # 'depth', 'sequence_number', 'visual', 'data'
         assert image.depth == 24
         return Image.frombytes("RGB", (capture_rect.width, capture_rect.height), image.data, "raw", "BGRX")
+
+    def _translate_coords_from_root(self, x, y) -> Tuple[int, int]:
+        root = self._screen.root
+        ret = root.translate_coords(self._window, x, y)
+        return ret.x, ret.y
+
+    def move_to(self, x: int, y: int, relative: bool = True) -> None:
+        if relative:
+            x, y = self._translate_coords_from_root(x, y)
+
+        fake_input(self._display, Xlib.X.MotionNotify, x=x, y=y)
+        self._display.sync()
+
+    def mouse_down(self, button_no: int) -> None:
+        fake_input(self._display, Xlib.X.ButtonPress, button_no)
+        self._display.sync()
+
+    def mouse_up(self, button_no: int) -> None:
+        fake_input(self._display, Xlib.X.ButtonRelease, button_no)
+        self._display.sync()
+
+    def click(self, button_no: int) -> None:
+        self.mouse_down(button_no)
+        self.mouse_up(button_no)
 
 
 class Screen:
