@@ -19,6 +19,14 @@ export class WebRTCClient {
         });
         this.pc.ontrack = this.onTrack.bind(this);
         this.pc.ondatachannel = this.onDataChannel.bind(this);
+        this.pc.onconnectionstatechange = (e) => {
+            switch (this.pc.iceConnectionState) {
+                case "closed":
+                case "failed":
+                    this.pc.close();
+                    alert("Connection has closed");
+            }
+        }
     }
 
     private onTrack(event: RTCTrackEvent): void {
