@@ -46,7 +46,7 @@ export class WebRTCClient {
     }
 
     public async SetOfferAndCreateAnswer(offer: string): Promise<string> {
-        await this.pc.setRemoteDescription(new RTCSessionDescription(JSON.parse(atob(offer))));
+        await this.pc.setRemoteDescription(new RTCSessionDescription(JSON.parse(offer)));
         const answer = await this.pc.createAnswer();
 
         // NOTE(igarashi): Create promise to wait until localDescription gets ready.
@@ -61,7 +61,7 @@ export class WebRTCClient {
 
         await this.pc.setLocalDescription(answer);
         const localDescription = await promise;
-        return btoa(JSON.stringify(localDescription));
+        return JSON.stringify(localDescription);
     }
 
 }
