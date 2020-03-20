@@ -29,14 +29,14 @@ export class MediaStreamScreen {
         }
     }
 
+    private updateFrameByVideo = () => {
+        this.ctx.drawImage(this.video, 0, 0);
+        window.requestAnimationFrame(this.updateFrameByVideo);
+    }
+
     private updateCanvasSize() {
         this.canvas.width = this.video.videoWidth;
         this.canvas.height = this.video.videoHeight;
-    }
-
-    private updateFrameByVideo() {
-        this.ctx.drawImage(this.video, 0, 0);
-        window.requestAnimationFrame(this.updateFrameByVideo);
     }
 
     public SetupMediaStream(stream: MediaStream) {
