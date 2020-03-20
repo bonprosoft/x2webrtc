@@ -12,7 +12,7 @@ class WebRTCClient:
         self._track = track
 
         self._pc.addTrack(self._track)
-        self._channel: RTCDataChannel = self._pc.createDataChannel("data")
+        self._channel: RTCDataChannel = self._pc.createDataChannel("io")
 
         self._lock = asyncio.Lock()
         self._connection_task: Optional[asyncio.Task[None]] = None
