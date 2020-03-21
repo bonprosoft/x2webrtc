@@ -3,7 +3,7 @@ import json
 import logging
 from typing import Optional
 
-from aiortc import RTCDataChannel, RTCPeerConnection, RTCSessionDescription
+from aiortc import RTCDataChannel, RTCPeerConnection, RTCSessionDescription, RTCConfiguration, RTCIceServer
 
 from x2webrtc import models
 from x2webrtc.track import ScreenCaptureTrack
@@ -14,7 +14,7 @@ _logger = logging.getLogger(__name__)
 
 class WebRTCClient:
     def __init__(self, track: ScreenCaptureTrack, input_handler: InputHandler):
-        self._pc = RTCPeerConnection()
+        self._pc = RTCPeerConnection(RTCConfiguration(iceServers=[RTCIceServer("stun:stun.l.google.com:19302")]))
         self._track = track
         self._input_handler = input_handler
 
