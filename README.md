@@ -34,14 +34,14 @@ I am planning to implement a plug-in system so that a user can customize its sig
 
     If `DISPLAY` environment is not set to your environment, pass `--display` argument to specify an X server.
 
-    ```
+    ```sh
     x2webrtc forward --display :0
     ```
 
 2. (tentative) Copy a WebRTC offer.
 You will see the following message on your terminal:
 
-    ```
+    ```sh
     -- Please send this message to the remote party --
     {"sdp": "..." , "type": "offer"}
     ```
@@ -56,7 +56,7 @@ You will see the following message on your terminal:
 
 ## Usage
 
-```
+```sh
 usage: x2webrtc [-h] [-v] COMMANDS ...
 
 Commands:
@@ -72,7 +72,7 @@ optional arguments:
 
 Forward a specified X window.
 
-```
+```sh
 usage: x2webrtc forward [-h] [--display DISPLAY]
 
 optional arguments:
@@ -84,7 +84,7 @@ optional arguments:
 
 Show information on a specified X server.
 
-```
+```sh
 usage: x2webrtc info [-h] [--display DISPLAY] [--props]
 
 optional arguments:
