@@ -31,9 +31,12 @@ class WebRTCClient:
             # TODO(igarashi): Handle connection closed
             while True:
                 if self._pc.sctp.transport.state == "closed":
+                    _logger.warn("stream cancelled by remote")
                     break
 
                 await asyncio.sleep(0.1)
+        except asyncio.CancelledError:
+            _logger.warn("operation cancelled")
         finally:
             self._connection_task = None
             self._track.active = False
@@ -65,6 +68,7 @@ class WebRTCClient:
         obj = await self.signaling.receive()
         assert isinstance(obj, RTCSessionDescription)
         await self._pc.setRemoteDescription(obj)
+        _logger.info("remote description received")
         self._connection_task = loop.create_task(self._run())
 
     async def connect(self) -> None:
@@ -78,4 +82,5 @@ class WebRTCClient:
         await t
 
     async def disconnect(self) -> None:
+        _logger.info("disconnecting WebRTC peer connection")
         await self._pc.close()

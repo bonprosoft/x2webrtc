@@ -3,7 +3,7 @@ import asyncio
 import logging
 import sys
 import threading
-from typing import Tuple
+from typing import Optional, Tuple
 
 import numpy
 
@@ -136,8 +136,14 @@ async def amain():
 def main():
     # NOTE(igarashi): Since `asyncio.run` is unavailable in Python 3.6, we use low-level APIs
     loop = asyncio.get_event_loop()
+    task: Optional[asyncio.Task[None]] = None
     try:
-        loop.run_until_complete(amain())
+        task = asyncio.ensure_future(amain())
+        loop.run_until_complete(task)
+    except KeyboardInterrupt:
+        if task:
+            task.cancel()
+            loop.run_until_complete(task)
     finally:
         loop.close()
 
