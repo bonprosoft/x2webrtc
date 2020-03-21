@@ -97,8 +97,8 @@ class Screen:
 
 
 class Display:
-    def __init__(self):
-        self._display = Xlib.display.Display()
+    def __init__(self, display_name: Optional[str] = None):
+        self._display = Xlib.display.Display(display_name)
 
     def screen(self, display_no: Optional[int] = None) -> Screen:
         return Screen(self._display, self._display.screen())

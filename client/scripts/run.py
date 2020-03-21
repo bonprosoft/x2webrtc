@@ -26,8 +26,7 @@ def forward_screen(window: Window, track: ScreenCaptureTrack, quit: threading.Ev
 
 
 def _get_target_window(args: argparse.Namespace) -> Tuple[Display, Screen, Window]:
-    # TODO(igarashi): Take args.display in the constructor
-    display = Display()
+    display = Display(args.display)
     screen = display.screen()
     # TODO(igarashi): Select a window using CLI argument
     target_window = screen.root_window
@@ -80,8 +79,7 @@ def traverse_windows(depth: int, window: Window, props: bool) -> None:
 
 
 async def start_info(args: argparse.Namespace) -> None:
-    # TODO(igarashi): Take args.display in the constructor
-    display = Display()
+    display = Display(args.display)
     for screen_idx in range(display.screen_count()):
         screen = display.screen(screen_idx)
         screen_size = screen.size
