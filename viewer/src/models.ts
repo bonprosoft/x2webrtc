@@ -12,9 +12,9 @@ export class MouseMoveEvent {
 }
 
 export enum MouseButtonKind {
-    Left = 0,
-    Middle = 1,
-    Right = 2,
+    Left = "LEFT",
+    Middle = "MIDDLE",
+    Right = "RIGHT",
 }
 
 export enum ButtonEventKind {
