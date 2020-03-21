@@ -3,6 +3,7 @@ import threading
 
 import numpy
 
+from x2webrtc.input import InputHandler
 from x2webrtc.screen_capture import Display, Window
 from x2webrtc.webrtc import ScreenCaptureTrack, WebRTCClient
 
@@ -19,15 +20,17 @@ async def main():
     track = ScreenCaptureTrack()
     display = Display()
     screen = display.screen()
-    window = screen.root_window
-    connection = WebRTCClient(track)
+    target_window = screen.root_window
 
+    input_handler = InputHandler()
+    connection = WebRTCClient(track, input_handler)
     loop = asyncio.get_event_loop()
 
     await connection.connect()
     cancelled = threading.Event()
     try:
-        t = loop.run_in_executor(None, capture_and_send, window, track, cancelled)
+        t = loop.run_in_executor(None, capture_and_send, target_window, track, cancelled)
+        input_handler.set_target(target_window)
         await connection.wait_until_complete()
         cancelled.set()
         await t

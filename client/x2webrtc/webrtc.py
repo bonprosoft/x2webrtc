@@ -39,9 +39,9 @@ class WebRTCClient:
             self._track.active = False
             await self._pc.close()
 
-    def _on_message(self, message: str) -> None:
+    def _on_message(self, message_str: str) -> None:
         try:
-            data = json.loads(message)
+            data = json.loads(message_str)
             message = models.from_dict(data)
             if isinstance(message, models.InputReport):
                 self._input_handler.send(message)
