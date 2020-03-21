@@ -50,7 +50,12 @@ export class WebRTCClient {
             return;
         }
 
+        channel.onclose = (e) => {
+            this.screen.StopReport();
+        };
+
         this.screen.SetupDataChannel(channel);
+        this.screen.StartReport();
     }
 
     public async SetOfferAndCreateAnswer(offer: string): Promise<string> {

@@ -1,6 +1,9 @@
+import { EventReport, ScreenEvent } from "./models";
 
 
 export class MediaStreamScreen {
+
+    public readonly SendReportInterval: number = 100;
 
     private canvas: HTMLCanvasElement;
 
@@ -11,6 +14,12 @@ export class MediaStreamScreen {
     private dataChannel: RTCDataChannel = null;
 
     private mediaStream: MediaStream = null;
+
+    private started: boolean = false;
+
+    private sendReportIntervalId: number;
+
+    private eventQueue: ScreenEvent[] = [];
 
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
@@ -31,7 +40,21 @@ export class MediaStreamScreen {
         }
     }
 
+    private sendReport = () => {
+        const toSend = this.eventQueue.splice(0, this.eventQueue.length);
+        if (this.dataChannel == null || this.dataChannel.readyState !== "open")
+            return;
+
+        const report = new EventReport()
+        report.events = toSend;
+
+        const json = JSON.stringify(report);
+        this.dataChannel.send(json);
+    }
+
     private canvasClicked = (e: MouseEvent) => {
+        if (!this.started) return;
+
         const rect = (<HTMLElement>e.target).getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
@@ -59,6 +82,25 @@ export class MediaStreamScreen {
 
     public SetupDataChannel(channel: RTCDataChannel) {
         this.dataChannel = channel;
+    }
+
+    public StartReport = () => {
+        if (this.started)
+            return;
+        this.started = true;
+        this.sendReportIntervalId = window.setInterval(() => {
+            this.sendReport();
+        }, this.SendReportInterval);
+    }
+
+    public StopReport = () => {
+        if (!this.started)
+            return;
+
+        this.dataChannel = null;
+        this.mediaStream = null;
+        window.clearInterval(this.sendReportIntervalId);
+        this.started = false;
     }
 
 }

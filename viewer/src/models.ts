@@ -22,9 +22,9 @@ export class MouseButtonEvent {
     event_kind: ButtonEventKind;
 }
 
-export type ScreenEvents = MouseMoveEvent | MouseButtonEvent;
+export type ScreenEvent = MouseMoveEvent | MouseButtonEvent;
 
-export class EventReports {
+export class EventReport {
     kind: "event";
-    events: ScreenEvents[];
+    events: ScreenEvent[];
 }
