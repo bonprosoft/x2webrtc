@@ -1,6 +1,6 @@
 import time
 
-from momo.screen_capture import Display
+from x2webrtc.screen_capture import Display
 
 
 def main() -> None:

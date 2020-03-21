@@ -7,7 +7,7 @@ import numpy
 from aiortc.mediastreams import MediaStreamTrack
 from av import VideoFrame
 
-from momo.timer import Timer
+from x2webrtc.timer import Timer
 
 VIDEO_TIME_BASE = fractions.Fraction(1, 1000)
 

@@ -1,4 +1,4 @@
-from momo.screen_capture import Display, Window
+from x2webrtc.screen_capture import Display, Window
 
 
 def find_by_name(window: Window, name: int) -> Window:

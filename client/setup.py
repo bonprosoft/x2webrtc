@@ -3,7 +3,7 @@ from setuptools import setup
 
 
 setup(
-    name="momo",
+    name="x2webrtc",
     version="0.0.0",
     packages=find_packages(),
     install_requires=[

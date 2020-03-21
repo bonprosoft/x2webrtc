@@ -3,7 +3,7 @@ from typing import Optional
 
 from aiortc import RTCDataChannel, RTCPeerConnection, RTCSessionDescription
 
-from momo.track import ScreenCaptureTrack
+from x2webrtc.track import ScreenCaptureTrack
 
 
 class WebRTCClient:

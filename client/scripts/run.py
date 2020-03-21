@@ -3,8 +3,8 @@ import threading
 
 import numpy
 
-from momo.screen_capture import Display, Window
-from momo.webrtc import ScreenCaptureTrack, WebRTCClient
+from x2webrtc.screen_capture import Display, Window
+from x2webrtc.webrtc import ScreenCaptureTrack, WebRTCClient
 
 
 def capture_and_send(window: Window, track: ScreenCaptureTrack, cancelled: threading.Event) -> None:
