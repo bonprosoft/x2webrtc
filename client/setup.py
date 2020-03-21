@@ -9,6 +9,7 @@ setup(
         "aiortc>=0.9.0,<0.10.0",
         "av>=7.0.0,<8.0.0",
         "dacite>=1.2.0,<1.3.0",
+        "dataclasses; python_version < '3.7'",
         "numpy>=1.18.0,<1.19.0",
         "python-xlib>=0.26,<1.0",
     ],

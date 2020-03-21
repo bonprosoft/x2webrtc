@@ -136,7 +136,12 @@ async def amain():
 
 
 def main():
-    asyncio.run(amain())
+    # NOTE(igarashi): Since `asyncio.run` is unavailable in Python 3.6, we use low-level APIs
+    loop = asyncio.get_event_loop()
+    try:
+        loop.run_until_complete(amain())
+    finally:
+        loop.close()
 
 
 if __name__ == "__main__":
