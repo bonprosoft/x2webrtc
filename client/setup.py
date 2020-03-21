@@ -1,6 +1,4 @@
-from setuptools import find_packages
-from setuptools import setup
-
+from setuptools import find_packages, setup
 
 setup(
     name="x2webrtc",
@@ -15,4 +13,5 @@ setup(
         "python-xlib>=0.26,<1.0",
     ],
     extras_require={"test": ["pytest>=5.0.0,<6.0.0"]},
+    entry_points={"console_scripts": ["x2webrtc=x2webrtc.cli:main"]},
 )

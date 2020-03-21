@@ -103,7 +103,7 @@ def set_logger_verbosity(verbosity: int) -> None:
     _logger.addHandler(handler)
 
 
-async def main():
+async def amain():
     parser = argparse.ArgumentParser(description="x2webrtc")
     parser.add_argument(
         "-v", "--verbose", action="count", default=0, help="verbose; can be used up to 3 times to increase verbosity",
@@ -135,5 +135,9 @@ async def main():
     await args.func(args)
 
 
+def main():
+    asyncio.run(amain())
+
+
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
