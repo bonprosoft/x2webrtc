@@ -1,10 +1,12 @@
 import dataclasses
+import threading
 from typing import Dict, Iterator, List, Optional, Tuple
 
 import Xlib
 import Xlib.display
 import Xlib.X
 from PIL import Image
+from Xlib.ext.xtest import fake_input
 
 
 @dataclasses.dataclass
@@ -20,7 +22,7 @@ class Window:
         self._display = display
         self._screen = screen
         self._window = window
-        pass
+        self._lock = threading.RLock()
 
     @property
     def id(self) -> int:
@@ -28,11 +30,13 @@ class Window:
 
     @property
     def wm_name(self) -> Optional[str]:
-        return self._window.get_wm_name()
+        with self._lock:
+            return self._window.get_wm_name()
 
     @property
     def wm_class(self) -> Optional[List[str]]:
-        return self._window.get_wm_class()
+        with self._lock:
+            return self._window.get_wm_class()
 
     @property
     def owner_id(self) -> int:
@@ -40,32 +44,42 @@ class Window:
 
     @property
     def rect(self) -> Rectangle:
-        geo = self._window.get_geometry()
-        return Rectangle(geo.x, geo.y, geo.width, geo.height)
+        with self._lock:
+            geo = self._window.get_geometry()
+            return Rectangle(geo.x, geo.y, geo.width, geo.height)
 
     @property
     def properties(self) -> Dict[str, str]:
-        props = self._window.list_properties()
-        atoms = {}
-        for p in props:
-            atoms[self._display.get_atom_name(p)] = self._window.get_full_text_property(p)
+        with self._lock:
+            props = self._window.list_properties()
+            atoms = {}
+            for p in props:
+                atoms[self._display.get_atom_name(p)] = self._window.get_full_text_property(p)
 
-        return atoms
+            return atoms
 
     @property
     def get_children(self) -> Iterator["Window"]:
-        tree = self._window.query_tree()
+        with self._lock:
+            tree = self._window.query_tree()
+
         for d in tree.children:
             yield Window(self._display, self._screen, d)
 
     def capture(self, rect: Optional[Rectangle] = None) -> Image.Image:
-        capture_rect = rect or self.rect
-        image = self._window.get_image(
-            capture_rect.x, capture_rect.y, capture_rect.width, capture_rect.height, Xlib.X.ZPixmap, 0xFFFFFFFF
-        )
+        with self._lock:
+            capture_rect = rect or self.rect
+            image = self._window.get_image(
+                capture_rect.x, capture_rect.y, capture_rect.width, capture_rect.height, Xlib.X.ZPixmap, 0xFFFFFFFF
+            )
         # 'depth', 'sequence_number', 'visual', 'data'
         assert image.depth == 24
         return Image.frombytes("RGB", (capture_rect.width, capture_rect.height), image.data, "raw", "BGRX")
+
+    def fake_input(self, event_type: int, detail: int = 0, x: int = 0, y: int = 0) -> None:
+        with self._lock:
+            fake_input(self._display, event_type, detail, x=x, y=y)
+            self._display.sync()
 
 
 class Screen:

@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import threading
 
 import numpy
@@ -10,13 +11,19 @@ from x2webrtc.webrtc import ScreenCaptureTrack, WebRTCClient
 
 def capture_and_send(window: Window, track: ScreenCaptureTrack, cancelled: threading.Event) -> None:
     while not cancelled.is_set():
-        track.wait_for_next_put()
-        im = window.capture()
-        arr = numpy.asarray(im)
-        track.put_frame(arr)
+        try:
+            track.wait_for_next_put()
+            im = window.capture()
+            arr = numpy.asarray(im)
+            track.put_frame(arr)
+        except Exception:
+            pass
 
 
 async def main():
+    logging.getLogger("x2webrtc").setLevel(logging.DEBUG)
+    logging.getLogger("x2webrtc").addHandler(logging.StreamHandler())
+
     track = ScreenCaptureTrack()
     display = Display()
     screen = display.screen()
