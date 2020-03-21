@@ -22,4 +22,5 @@ setup(
     ],
     extras_require={"test": ["pytest>=5.0.0,<6.0.0"]},
     entry_points={"console_scripts": ["x2webrtc=x2webrtc.cli:main"]},
+    package_data={"x2webrtc": ["py.typed"]},
 )

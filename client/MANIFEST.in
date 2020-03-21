@@ -1,5 +1,5 @@
 include README.md
 include LICENSE
 
-recursive-include x2webrtc *.py
+recursive-include x2webrtc *.py py.typed
 recursive-include scripts *.py
