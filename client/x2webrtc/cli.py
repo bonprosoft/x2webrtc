@@ -9,7 +9,8 @@ import numpy
 
 from x2webrtc.input import InputHandler
 from x2webrtc.screen_capture import Display, Screen, Window
-from x2webrtc.webrtc import ScreenCaptureTrack, WebRTCClient
+from x2webrtc.track import ScreenCaptureTrack
+from x2webrtc.webrtc import WebRTCClient
 
 _logger = logging.getLogger(__name__)
 
