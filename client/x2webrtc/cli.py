@@ -132,7 +132,7 @@ def main():
     set_logger_verbosity(args.verbose)
 
     loop = asyncio.get_event_loop()
-    task: Optional[asyncio.Task[None]] = None
+    task: Optional[asyncio.Future[None]] = None
     try:
         task = asyncio.ensure_future(args.func(args))
         loop.run_until_complete(task)
