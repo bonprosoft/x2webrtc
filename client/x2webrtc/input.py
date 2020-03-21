@@ -24,9 +24,12 @@ class InputHandler:
     def _translate_coords_from_root(self, x: int, y: int) -> Tuple[int, int]:
         with self._lock:
             assert self._target is not None
-            root = self._target._screen.root
-            ret = root.translate_coords(self._target._window, x, y)
-            return ret.x, ret.y
+            # root = self._target._screen.root
+            # ret = root.translate_coords(self._target._window, x, y)
+            # NOTE(igarashi): The result of translate_coords from root to the window seems to be the same
+            # as the following code.
+            rect = self._target.rect
+            return x + rect.x, y + rect.y
 
     def move_to(self, x: int, y: int, relative: bool = True) -> None:
         with self._lock:
