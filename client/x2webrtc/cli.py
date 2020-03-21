@@ -103,7 +103,8 @@ def set_logger_verbosity(verbosity: int) -> None:
     _logger.addHandler(handler)
 
 
-async def amain():
+def main():
+    # NOTE(igarashi): Since `asyncio.run` is unavailable in Python 3.6, we use low-level APIs
     parser = argparse.ArgumentParser(description="x2webrtc")
     parser.add_argument(
         "-v", "--verbose", action="count", default=0, help="verbose; can be used up to 3 times to increase verbosity",
@@ -125,20 +126,15 @@ async def amain():
 
     args = parser.parse_args()
     if "func" not in args:
-        print(parser.parse_args(["-h"]))
+        parser.print_help()
         sys.exit(1)
 
     set_logger_verbosity(args.verbose)
 
-    await args.func(args)
-
-
-def main():
-    # NOTE(igarashi): Since `asyncio.run` is unavailable in Python 3.6, we use low-level APIs
     loop = asyncio.get_event_loop()
     task: Optional[asyncio.Task[None]] = None
     try:
-        task = asyncio.ensure_future(amain())
+        task = asyncio.ensure_future(args.func(args))
         loop.run_until_complete(task)
     except KeyboardInterrupt:
         if task:
