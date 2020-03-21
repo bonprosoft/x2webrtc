@@ -3,11 +3,13 @@
 [![PyPI Supported Python Versions](https://img.shields.io/pypi/pyversions/x2webrtc.svg)](https://pypi.org/project/x2webrtc/)
 [![GitHub license](https://img.shields.io/github/license/bonprosoft/x2webrtc.svg)](https://github.com/bonprosoft/x2webrtc)
 
-x2webrtc is a command-line tool for forwarding an X window as a media track through WebRTC.  It is a simple tool; it just grabs screenshots for the window with Xlib and send them via a WebRTC stream, but it can realize the following features:
-You can send an X window through the NAT.
-A media stream is transported using a secure method. (compared to the standard VNC)
-You can easily install it by pip.
-You don't necessarily have admin access to the system.
+x2webrtc is a command-line tool for forwarding an X window as a media track through WebRTC.
+It is a simple tool; it just grabs screenshots for the window with Xlib and send them via a WebRTC stream, but it can realize the following features:
+
+- You can send an X window through the NAT.
+- A media stream is transported using a secure method. (compared to the standard VNC)
+- You can easily install it by pip.
+- You don't necessarily have admin access to the system.
 
 ## Install
 
