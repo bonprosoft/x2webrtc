@@ -25,20 +25,29 @@ class MouseMoveEvent(EventBase):
     y: int
 
 
-class MouseButtonKind(enum.Enum):
-    LEFT_BUTTON = "LEFT"
-    MIDDLE_BUTTON = "MIDDLE"
-    RIGHT_BUTTON = "RIGHT"
+class TupleEnum(enum.Enum):
+    def get_representative(self):
+        return self.value[0]
+
+    def get_value(self):
+        return self.value[1]
+
+    @classmethod
+    def parse_representative(cls, s):
+        for k, entry in cls.__members__.items():
+            if entry.get_representative() == s:
+                return entry
+
+        raise ValueError("unknown entry: {}".format(s))
+
+
+class MouseButtonKind(TupleEnum):
+    LEFT_BUTTON = ("LEFT", 1)
+    MIDDLE_BUTTON = ("MIDDLE", 2)
+    RIGHT_BUTTON = ("RIGHT", 3)
 
     def to_X11(self) -> int:
-        if self.value == MouseButtonKind.LEFT_BUTTON:
-            return 1
-        elif self.value == MouseButtonKind.MIDDLE_BUTTON:
-            return 2
-        elif self.value == MouseButtonKind.RIGHT_BUTTON:
-            return 3
-        else:
-            raise RuntimeError("unknown value")
+        return self.get_value()
 
 
 class ButtonEventKind(enum.Enum):
@@ -77,6 +86,7 @@ MESSAGE_TYPE_MAP: Dict[str, Type[MessageType]] = {
 }
 
 T = TypeVar("T")
+TTupleEnum = TypeVar("TTupleEnum", bound=TupleEnum)
 
 
 def _find_type(data: Any, type_map: Mapping[str, Type[T]]) -> Type[T]:
@@ -97,10 +107,23 @@ def _parse_int(data: Any) -> int:
         raise RuntimeError("an integer value expected, but got type: {}".format(type(data)))
 
 
+def _parse_tuple_enum(cls: Type[TTupleEnum], data: Any) -> TTupleEnum:
+    return cls.parse_representative(data)
+
+
 def _parse_event(data: Any, type_map: Mapping[str, Type[T]]) -> T:
     ret_type = _find_type(data, type_map)
     ret = dacite.from_dict(
-        ret_type, data, config=dacite.Config(type_hooks={int: lambda x: _parse_int(x)}, cast=[enum.Enum], strict=True),
+        ret_type,
+        data,
+        config=dacite.Config(
+            type_hooks={
+                int: lambda x: _parse_int(x),
+                MouseButtonKind: lambda x: _parse_tuple_enum(MouseButtonKind, x),
+            },
+            cast=[enum.Enum],
+            strict=True,
+        ),
     )
     return cast(T, ret)
 
@@ -115,6 +138,7 @@ def from_dict(data: Any) -> MessageBase:
             config=dacite.Config(
                 type_hooks={
                     EventTypes: lambda x: _parse_event(x, EVENT_TYPE_MAP),  # type: ignore
+                    MouseButtonKind: lambda x: _parse_tuple_enum(MouseButtonKind, x),
                     int: lambda x: _parse_int(x),
                 },
                 cast=[enum.Enum],
@@ -129,7 +153,9 @@ def to_dict(data: MessageBase) -> Dict[str, Any]:
 
 
 def _serialize_object(o: Any) -> Any:
-    if isinstance(o, enum.Enum):
+    if isinstance(o, TupleEnum):
+        return o.get_representative()
+    elif isinstance(o, enum.Enum):
         return o.value
 
     raise TypeError("{} is not JSON serializable".format(o))
