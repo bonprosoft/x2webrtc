@@ -5,7 +5,7 @@ setup(
     description="Forward X window through WebRTC as a MediaStream",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
-    version="0.0.1",
+    version="0.1.0",
     author="Yuki Igarashi",
     author_email="me@bonprosoft.com",
     url="https://github.com/bonprosoft/x2webrtc",
