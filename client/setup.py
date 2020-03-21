@@ -3,6 +3,8 @@ from setuptools import find_packages, setup
 setup(
     name="x2webrtc",
     description="Forward X window through WebRTC as a MediaStream",
+    long_description=open("README.md").read(),
+    long_description_content_type="text/markdown",
     version="0.0.1",
     author="Yuki Igarashi",
     author_email="me@bonprosoft.com",
