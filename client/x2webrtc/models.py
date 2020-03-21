@@ -54,14 +54,14 @@ class MessageBase(_LiteralUnion):
 
 
 @dataclass
-class EventReport(MessageBase):
-    kind: str = field(default="event", init=False)
+class InputReport(MessageBase):
+    kind: str = field(default="input", init=False)
     events: List[EventTypes]
 
 
-MessageType = Union[EventReport]
+MessageType = Union[InputReport]
 MESSAGE_TYPE_MAP: Dict[str, Type[MessageType]] = {
-    EventReport.kind: EventReport,
+    InputReport.kind: InputReport,
 }
 
 T = TypeVar("T")

@@ -24,7 +24,7 @@ export class MouseButtonEvent {
 
 export type ScreenEvent = MouseMoveEvent | MouseButtonEvent;
 
-export class EventReport {
-    kind: "event";
+export class InputReport {
+    kind: "input";
     events: ScreenEvent[];
 }

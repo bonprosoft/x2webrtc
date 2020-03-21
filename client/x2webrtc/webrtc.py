@@ -43,7 +43,7 @@ class WebRTCClient:
         try:
             data = json.loads(message)
             message = models.from_dict(data)
-            if isinstance(message, models.EventReport):
+            if isinstance(message, models.InputReport):
                 self._input_handler.send(message)
 
         except Exception:

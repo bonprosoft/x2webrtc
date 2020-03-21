@@ -1,7 +1,6 @@
-from x2webrtc.models import EventReport
+from x2webrtc.models import InputReport
 
 
 class InputHandler:
-
-    def send(self, message: EventReport):
+    def send(self, message: InputReport):
         pass

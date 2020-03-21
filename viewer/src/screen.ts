@@ -1,4 +1,4 @@
-import { EventReport, ScreenEvent } from "./models";
+import { InputReport, ScreenEvent } from "./models";
 
 
 export class MediaStreamScreen {
@@ -45,7 +45,7 @@ export class MediaStreamScreen {
         if (this.dataChannel == null || this.dataChannel.readyState !== "open")
             return;
 
-        const report = new EventReport()
+        const report = new InputReport()
         report.events = toSend;
 
         const json = JSON.stringify(report);

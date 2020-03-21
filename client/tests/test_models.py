@@ -2,7 +2,7 @@ import json
 
 from x2webrtc.models import (
     ButtonEventKind,
-    EventReport,
+    InputReport,
     MouseButtonEvent,
     MouseButtonKind,
     MouseMoveEvent,
@@ -15,7 +15,7 @@ def test_convert_convertback():
     a = MouseMoveEvent(10, 20)
     b = MouseButtonEvent(MouseButtonKind.LEFT_BUTTON, ButtonEventKind.BUTTON_DOWN)
     c = MouseButtonEvent(MouseButtonKind.LEFT_BUTTON, ButtonEventKind.BUTTON_UP)
-    data = EventReport([a, b, c])
+    data = InputReport([a, b, c])
     serialized = json.dumps(to_dict(data))
 
     deserialized = from_dict(json.loads(serialized))
