@@ -48,11 +48,11 @@ You will see the following message on your terminal:
 
     Please copy the offer json.
 
-3. (tentative) Open the web client and click `Connect` button.
+3. (tentative) Open [the web viewer](https://bonprosoft.github.io/x2webrtc/online_viewer/) and click `Connect` button.
 4. (tentative) Paste the offer json into `Input Offer` text-area (A) and click `Create Answer` button (B). Then you will get an answer json (C). Copy the json again.
 ![](https://raw.githubusercontent.com/bonprosoft/x2webrtc/master/imgs/quick_start_web_client.png)
 5. (tentative) Go back to your terminal. Paste the answer json into the terminal, then press Enter.
-6. Now you will see your screen in the web client.
+6. Now you will see your screen in the web viewer.
 
 ## Usage
 

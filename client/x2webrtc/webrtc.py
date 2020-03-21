@@ -63,6 +63,7 @@ class WebRTCClient:
 
         self.signaling = CopyAndPasteSignaling()
         await self.signaling.connect()
+        print("[NOTE] The online viewer is available at https://bonprosoft.github.io/x2webrtc/online_viewer/ ")
         await self.signaling.send(self._pc.localDescription)
         # TODO(igarashi): Receive answer and ice somehow
         obj = await self.signaling.receive()
