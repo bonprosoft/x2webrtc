@@ -58,7 +58,6 @@ class Window:
 
             return atoms
 
-    @property
     def get_children(self) -> Iterator["Window"]:
         with self._lock:
             tree = self._window.query_tree()
