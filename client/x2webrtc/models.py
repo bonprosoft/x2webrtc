@@ -24,9 +24,19 @@ class MouseMoveEvent(EventBase):
 
 
 class MouseButtonKind(enum.IntEnum):
-    LEFT_BUTTON = 0
-    MIDDLE_BUTTON = 1
-    RIGHT_BUTTON = 2
+    LEFT_BUTTON = "LEFT"
+    MIDDLE_BUTTON = "MIDDLE"
+    RIGHT_BUTTON = "RIGHT"
+
+    def to_X11(self) -> int:
+        if self.value == MouseButtonKind.LEFT_BUTTON:
+            return 1
+        elif self.value == MouseButtonKind.MIDDLE_BUTTON:
+            return 2
+        elif self.value == MouseButtonKind.RIGHT_BUTTON:
+            return 3
+        else:
+            raise RuntimeError("unknown value")
 
 
 class ButtonEventKind(enum.IntEnum):

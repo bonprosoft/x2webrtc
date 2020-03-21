@@ -41,30 +41,30 @@ class InputHandler:
             fake_input(d, Xlib.X.MotionNotify, x=x, y=y)
             d.sync()
 
-    def mouse_down(self, button_no: models.MouseButtonKind) -> None:
+    def mouse_down(self, button: models.MouseButtonKind) -> None:
         with self._lock:
             if self._target is None:
                 return
 
-            _logger.debug("send: mouse_down, button={}".format(button_no))
+            _logger.debug("send: mouse_down, button={}".format(button))
             d = self._target._display
-            fake_input(d, Xlib.X.ButtonPress, button_no)
+            fake_input(d, Xlib.X.ButtonPress, button.to_X11())
             d.sync()
 
-    def mouse_up(self, button_no: models.MouseButtonKind) -> None:
+    def mouse_up(self, button: models.MouseButtonKind) -> None:
         with self._lock:
             if self._target is None:
                 return
 
-            _logger.debug("send: mouse_up, button={}".format(button_no))
+            _logger.debug("send: mouse_up, button={}".format(button))
             d = self._target._display
-            fake_input(d, Xlib.X.ButtonRelease, button_no)
+            fake_input(d, Xlib.X.ButtonRelease, button.to_X11())
             d.sync()
 
-    def click(self, button_no: models.MouseButtonKind) -> None:
+    def click(self, button: models.MouseButtonKind) -> None:
         with self._lock:
-            self.mouse_down(button_no)
-            self.mouse_up(button_no)
+            self.mouse_down(button)
+            self.mouse_up(button)
 
     def send(self, message: models.InputReport) -> None:
         with self._lock:
