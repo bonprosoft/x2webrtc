@@ -2,7 +2,12 @@ from setuptools import find_packages, setup
 
 setup(
     name="x2webrtc",
-    version="0.0.0",
+    description="Forward X window through WebRTC as a MediaStream",
+    version="0.0.1",
+    author="Yuki Igarashi",
+    author_email="me@bonprosoft.com",
+    url="https://github.com/bonprosoft/x2webrtc",
+    license="MIT License",
     packages=find_packages(),
     install_requires=[
         "Pillow>=7.0.0,<7.1.0",
