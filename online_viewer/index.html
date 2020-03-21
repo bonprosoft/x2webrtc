@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>x2webrtc Viewer</title>
+</head>
+
+<body>
+    <!-- Connect Modal -->
+    <div class="modal fade" id="connect-modal" tabindex="-1" role="dialog" aria-labelledby="connect-modal-label"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="connect-modal-label">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="offer-area">Input Offer</label>
+                        <textarea class="form-control" id="offer-area" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="offer-area">Created Answer</label>
+                        <textarea class="form-control" id="answer-area" rows="3" readonly></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">CreateAnswer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <header class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">x2webrtc Client</a>
+            <button type="button" class="btn btn-outline-success" data-toggle="modal"
+                data-target="#connect-modal">Connect</button>
+        </div>
+    </header>
+
+    <div class="container-fluid">
+        <canvas id="screen-canvas"></canvas>
+    </div>
+
+    <script type="text/javascript" src="bundle.js"></script>
+</body>
+
+</html>
