@@ -3,11 +3,11 @@ import json
 import logging
 from typing import Optional
 
-from aiortc import RTCDataChannel, RTCPeerConnection, RTCSessionDescription, RTCConfiguration, RTCIceServer
+from aiortc import RTCConfiguration, RTCDataChannel, RTCIceServer, RTCPeerConnection, RTCSessionDescription
 
 from x2webrtc import models
-from x2webrtc.track import ScreenCaptureTrack
 from x2webrtc.input import InputHandler
+from x2webrtc.track import ScreenCaptureTrack
 
 _logger = logging.getLogger(__name__)
 

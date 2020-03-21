@@ -120,9 +120,7 @@ async def amain():
     info_parser.add_argument(
         "--display", type=str, help="display_name of the X server to connect to (e.g., hostname:1, :1.)"
     )
-    info_parser.add_argument(
-        "--props", action="store_true", help="show all properties of each window"
-    )
+    info_parser.add_argument("--props", action="store_true", help="show all properties of each window")
     info_parser.set_defaults(func=start_info)
 
     args = parser.parse_args()

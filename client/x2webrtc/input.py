@@ -1,12 +1,11 @@
-import threading
 import logging
+import threading
 from typing import Optional, Tuple
 
 import Xlib.X
 
 from x2webrtc import models
 from x2webrtc.screen_capture import Window
-
 
 _logger = logging.getLogger(__name__)
 
