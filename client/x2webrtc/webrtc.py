@@ -1,18 +1,26 @@
 import asyncio
+import json
+import logging
 from typing import Optional
 
 from aiortc import RTCDataChannel, RTCPeerConnection, RTCSessionDescription
 
+from x2webrtc import models
 from x2webrtc.track import ScreenCaptureTrack
+from x2webrtc.input import InputHandler
+
+_logger = logging.getLogger(__name__)
 
 
 class WebRTCClient:
-    def __init__(self, track: ScreenCaptureTrack):
+    def __init__(self, track: ScreenCaptureTrack, input_handler: InputHandler):
         self._pc = RTCPeerConnection()
         self._track = track
+        self._input_handler = input_handler
 
         self._pc.addTrack(self._track)
-        self._channel: RTCDataChannel = self._pc.createDataChannel("io")
+        self._control_channel: RTCDataChannel = self._pc.createDataChannel("control")
+        self._control_channel.on("message", self._on_message)
 
         self._lock = asyncio.Lock()
         self._connection_task: Optional[asyncio.Task[None]] = None
@@ -30,6 +38,16 @@ class WebRTCClient:
             self._connection_task = None
             self._track.active = False
             await self._pc.close()
+
+    def _on_message(self, message: str) -> None:
+        try:
+            data = json.loads(message)
+            message = models.from_dict(data)
+            if isinstance(message, models.EventReport):
+                self._input_handler.send(message)
+
+        except Exception:
+            _logger.exception("got an unexpected exception")
 
     async def _establish_connection(self):
         loop = asyncio.get_event_loop()

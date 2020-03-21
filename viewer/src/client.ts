@@ -45,7 +45,7 @@ export class WebRTCClient {
 
     private onDataChannel(event: RTCDataChannelEvent): void {
         const channel = event.channel;
-        if (channel.label !== "io") {
+        if (channel.label !== "control") {
             console.error(`Unknown datachannel opened: ${channel.label}`);
             return;
         }
