@@ -1,4 +1,5 @@
 import enum
+import json
 from dataclasses import asdict, dataclass, field
 from typing import Any, Dict, List, Mapping, Type, TypeVar, Union, cast
 
@@ -7,7 +8,8 @@ import dacite
 
 @dataclass
 class _LiteralUnion:
-    # TODO(igarashi): Use typing.Literal to treat those discriminated union classes after dacite supports the feature
+    # TODO(igarashi): Use typing.Literal to treat those discriminated union
+    # classes after dacite supports the feature
     kind: str
 
 
@@ -23,7 +25,7 @@ class MouseMoveEvent(EventBase):
     y: int
 
 
-class MouseButtonKind(enum.IntEnum):
+class MouseButtonKind(enum.Enum):
     LEFT_BUTTON = "LEFT"
     MIDDLE_BUTTON = "MIDDLE"
     RIGHT_BUTTON = "RIGHT"
@@ -39,7 +41,7 @@ class MouseButtonKind(enum.IntEnum):
             raise RuntimeError("unknown value")
 
 
-class ButtonEventKind(enum.IntEnum):
+class ButtonEventKind(enum.Enum):
     BUTTON_DOWN = 0
     BUTTON_UP = 1
 
@@ -86,9 +88,20 @@ def _find_type(data: Any, type_map: Mapping[str, Type[T]]) -> Type[T]:
     return type_map[obj.kind]
 
 
+def _parse_int(data: Any) -> int:
+    if isinstance(data, int):
+        return data
+    elif isinstance(data, float):
+        return int(data)
+    else:
+        raise RuntimeError("an integer value expected, but got type: {}".format(type(data)))
+
+
 def _parse_event(data: Any, type_map: Mapping[str, Type[T]]) -> T:
     ret_type = _find_type(data, type_map)
-    ret = dacite.from_dict(ret_type, data, config=dacite.Config(cast=[enum.IntEnum], strict=True))
+    ret = dacite.from_dict(
+        ret_type, data, config=dacite.Config(type_hooks={int: lambda x: _parse_int(x)}, cast=[enum.Enum], strict=True),
+    )
     return cast(T, ret)
 
 
@@ -102,8 +115,9 @@ def from_dict(data: Any) -> MessageBase:
             config=dacite.Config(
                 type_hooks={
                     EventTypes: lambda x: _parse_event(x, EVENT_TYPE_MAP),  # type: ignore
+                    int: lambda x: _parse_int(x),
                 },
-                cast=[enum.IntEnum],
+                cast=[enum.Enum],
                 strict=True,
             ),
         ),
@@ -112,3 +126,19 @@ def from_dict(data: Any) -> MessageBase:
 
 def to_dict(data: MessageBase) -> Dict[str, Any]:
     return asdict(data)
+
+
+def _serialize_object(o: Any) -> Any:
+    if isinstance(o, enum.Enum):
+        return o.value
+
+    raise TypeError("{} is not JSON serializable".format(o))
+
+
+def from_json(s: str) -> MessageBase:
+    data = json.loads(s)
+    return from_dict(data)
+
+
+def to_json(data: MessageBase) -> str:
+    return json.dumps(to_dict(data), default=_serialize_object)
