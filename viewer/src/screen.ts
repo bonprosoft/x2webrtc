@@ -1,4 +1,4 @@
-import { InputReport, ScreenEvent } from "./models";
+import { InputReport, ScreenEvent, MouseMoveEvent, MouseButtonEvent, MouseButtonKind, ButtonEventKind } from "./models";
 
 
 export class MediaStreamScreen {
@@ -45,9 +45,9 @@ export class MediaStreamScreen {
         if (this.dataChannel == null || this.dataChannel.readyState !== "open")
             return;
 
-        const report = new InputReport()
-        report.events = toSend;
+        if (toSend.length == 0) return;
 
+        const report = new InputReport(toSend);
         const json = JSON.stringify(report);
         this.dataChannel.send(json);
     }
@@ -62,7 +62,11 @@ export class MediaStreamScreen {
         const screenX = (x / rect.width) * this.canvas.width;
         const screenY = (y / rect.height) * this.canvas.height;
 
-        console.log(`${screenX}, ${screenY}`);
+        console.log(`left click: ${screenX}, ${screenY}`);
+
+        this.eventQueue.push(new MouseMoveEvent(screenX, screenY));
+        this.eventQueue.push(new MouseButtonEvent(MouseButtonKind.Left, ButtonEventKind.ButtonDown));
+        this.eventQueue.push(new MouseButtonEvent(MouseButtonKind.Left, ButtonEventKind.ButtonUp));
     }
 
     private updateFrameByVideo = () => {
