@@ -67,13 +67,13 @@ def load_config_from_file(path: pathlib.Path) -> Config:
 def load_config() -> Config:
     env = os.environ.get(CONFIG_ENVKEY, None)
     if env is not None:
-        path = pathlib.Path(env)
+        path = pathlib.Path(env).expanduser().resolve()
         if not path.exists() or not path.is_file():
             raise RuntimeError("an invalid config file was specified in the environment variable")
         return load_config_from_file(path)
 
     for p in CONFIG_PATHS:
-        path = pathlib.Path(p)
+        path = pathlib.Path(p).expanduser().resolve()
         if path.exists() and path.is_file():
             return load_config_from_file(path)
 
