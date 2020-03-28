@@ -114,7 +114,7 @@ For more details, please refer to `x2webrtc/config.py`.
 
 ## Plugin
 
-You can customize the signaling procedure that x2webrtc uses for a WebRTC peer connection by using a plugin.
+You can customize the signaling method that x2webrtc uses for a WebRTC peer connection by using a plugin.
 Here is an example of a plugin implementation:
 ```py
 from typing import Type
