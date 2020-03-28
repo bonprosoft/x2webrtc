@@ -95,6 +95,45 @@ optional arguments:
   --props            show all properties of each window
 ```
 
+## Configuration
+
+The order of preference is the `$X2WEBRTC_CONFIG` environment variable, then `.x2webrtc` file of the working directory, and then `~/.x2webrtc`.
+The config file must be in the YAML format.
+Here is an example of a configuration file:
+```yaml
+signaling_plugin: "path/to/signaling_plugin.py"  # optional
+peer_connection:                 # optional
+  ice_servers:
+    - url: stun:stun.example.com
+    - url: turn:turn.example.com
+      username: shamiko          # optional
+      credential: momo           # optional
+```
+
+For more details, please refer to `x2webrtc/config.py`.
+
+## Plugin
+
+You can customize the signaling method that x2webrtc uses for a WebRTC peer connection by using a plugin.
+Here is an example of a plugin implementation:
+```py
+from typing import Type
+from aiortc import RTCPeerConnection
+from x2webrtc.plugin import SignalingPlugin
+
+class SomePlugin(SignalingPlugin):
+    async def __call__(self, pc: RTCPeerConnection) -> bool:
+        return True
+
+def plugin() -> Type[SignalingPlugin]:
+    return SomePlugin
+```
+
+A plugin file must have a `plugin` function that returns a subclass of `SignalingPlugin`.
+The plugin file is required to specify in a configuration file, as already mentioned in the Configuration section.
+
+For more details, please refer to `CopyAndPasteSignaling` class located in `x2webrtc/signaling.py`.
+
 ## FAQ
 
 ### Failed to install PyAV

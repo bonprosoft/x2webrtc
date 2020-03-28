@@ -1,0 +1,7 @@
+signaling_plugin: "/tmp/x2webrtc/config.py"
+peer_connection:
+    ice_servers:
+        - url: stun:stun.example.com
+        - url: turn:turn.example.com
+          username: shamiko
+          credential: momo

@@ -7,6 +7,7 @@ from typing import Optional, Tuple
 
 import numpy
 
+from x2webrtc.config import load_config
 from x2webrtc.input import InputHandler
 from x2webrtc.screen_capture import Display, Screen, Window
 from x2webrtc.track import ScreenCaptureTrack
@@ -40,7 +41,8 @@ async def start_forward(args: argparse.Namespace) -> None:
     display, screen, target_window = _get_target_window(args)
     track = ScreenCaptureTrack()
     input_handler = InputHandler()
-    connection = WebRTCClient(track, input_handler)
+    config = load_config()
+    connection = WebRTCClient(config, track, input_handler)
     quit = threading.Event()
 
     await connection.connect()

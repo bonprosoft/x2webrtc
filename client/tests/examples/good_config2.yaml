@@ -1,0 +1,3 @@
+peer_connection:
+    ice_servers:
+        - url: stun:stun2.example.com

@@ -13,6 +13,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         "Pillow>=7.0.0,<7.1.0",
+        "PyYAML>=5.0.0,<6.0.0",
         "aiortc>=0.9.0,<0.10.0",
         "av>=7.0.0,<8.0.0",
         "dacite>=1.2.0,<1.3.0",
@@ -28,7 +29,7 @@ setup(
         "Programming Language :: Python",
         "License :: OSI Approved :: MIT License",
     ],
-    extras_require={"test": ["pytest>=5.0.0,<6.0.0"]},
+    extras_require={"test": ["pytest>=5.0.0,<6.0.0", "pytest-asyncio>=0.10.0,<1.0.0"]},
     entry_points={"console_scripts": ["x2webrtc=x2webrtc.cli:main"]},
     package_data={"x2webrtc": ["py.typed"]},
 )
