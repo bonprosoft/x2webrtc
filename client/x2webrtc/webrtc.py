@@ -1,4 +1,5 @@
 import asyncio
+from typing import List
 import json
 import logging
 from typing import Optional
@@ -17,7 +18,12 @@ _logger = logging.getLogger(__name__)
 class WebRTCClient:
     def __init__(self, config: Config, track: ScreenCaptureTrack, input_handler: InputHandler):
         self._config = config
-        self._pc = RTCPeerConnection(RTCConfiguration(iceServers=[RTCIceServer("stun:stun.l.google.com:19302")]))
+
+        peer_connection_config = config.get_peer_connection_config()
+        ice_servers: List[RTCIceServer] = [
+            RTCIceServer(ice.url, ice.username, ice.credential) for ice in peer_connection_config.ice_servers
+        ]
+        self._pc = RTCPeerConnection(RTCConfiguration(iceServers=ice_servers))
         self._track = track
         self._input_handler = input_handler
 
@@ -57,7 +63,7 @@ class WebRTCClient:
 
     async def _establish_connection(self):
         loop = asyncio.get_event_loop()
-        signaling = get_signaling_method()
+        signaling = get_signaling_method(self._config.signaling_plugin)
         ret = await signaling(self._pc)
         if not ret:
             raise RuntimeError("signaling failed: failed to establish connection")
