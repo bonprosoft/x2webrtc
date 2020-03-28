@@ -7,7 +7,7 @@ import dacite
 import yaml
 
 CONFIG_ENVKEY = "X2WEBRTC_CONFIG"
-CONFIG_PATHES = [".x2webrtc", "~/.x2webrtc"]
+CONFIG_PATHS = [".x2webrtc", "~/.x2webrtc"]
 
 
 @dataclasses.dataclass
@@ -72,7 +72,7 @@ def load_config() -> Config:
             raise RuntimeError("an invalid config file was specified in the environment variable")
         return load_config_from_file(path)
 
-    for p in CONFIG_PATHES:
+    for p in CONFIG_PATHS:
         path = pathlib.Path(p)
         if path.exists() and path.is_file():
             return load_config_from_file(path)

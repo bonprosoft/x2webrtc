@@ -53,7 +53,7 @@ def _load_plugin(py_path: pathlib.Path) -> SignalingPlugin:
         raise
 
 
-def get_signaling_method(plugin_path: Optional[pathlib.Path]) -> SignalingPlugin:
+def get_signaling_method(plugin_path: Optional[pathlib.Path] = None) -> SignalingPlugin:
     if plugin_path is not None:
         return _load_plugin(plugin_path)
 

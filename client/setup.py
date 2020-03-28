@@ -29,7 +29,7 @@ setup(
         "Programming Language :: Python",
         "License :: OSI Approved :: MIT License",
     ],
-    extras_require={"test": ["pytest>=5.0.0,<6.0.0"]},
+    extras_require={"test": ["pytest>=5.0.0,<6.0.0", "pytest-asyncio>=0.10.0,<1.0.0"]},
     entry_points={"console_scripts": ["x2webrtc=x2webrtc.cli:main"]},
     package_data={"x2webrtc": ["py.typed"]},
 )
